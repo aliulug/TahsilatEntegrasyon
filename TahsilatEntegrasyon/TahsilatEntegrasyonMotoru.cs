@@ -27,6 +27,7 @@ namespace TahsilatEntegrasyon
 				return new EntegrasyonSonuc(SonucTip.SadeceTekBirAyIcinIslemYapilabilir);
 
 			_veritabaniVekili.OncedenYaratilmisEntegrasyonFisleriniTemizle(parametreler.TarihBaslangic,parametreler.TarihBitis);
+			_veritabaniVekili.EntegreEdilecekTahsilatlariAl(parametreler.TarihBaslangic, parametreler.TarihBitis);
 
 			return new EntegrasyonSonuc(SonucTip.EntegrasyonTamamlandi);
 		}

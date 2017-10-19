@@ -25,13 +25,10 @@ namespace TahsilatEntegrasyon
 		public void farkli_aylara_islem_yapilmak_istenilirse_hata_doner()
 		{
 			ortamAyarla(true, true);
-			EntegrasyonParametreler parametreler = new EntegrasyonParametreler
-			{
-				TarihBaslangic = DateTime.Today,
-				TarihBitis = DateTime.Today.AddMonths(2),
-				TemizlikYap = false
-			};
+			var parametreler = new EntegrasyonParametreler(DateTime.Today, DateTime.Today.AddMonths(2), false);
+
 			var sonuc = _motor.EntegrasyonYap(parametreler);
+
 			Assert.AreEqual(SonucTip.SadeceTekBirAyIcinIslemYapilabilir, sonuc.Tip);
 		}
 
@@ -39,13 +36,8 @@ namespace TahsilatEntegrasyon
 		public void islem_yapilan_ay_acik_olmali()
 		{
 			ortamAyarla(false, true);
+			var parametreler = new EntegrasyonParametreler(DateTime.Today, DateTime.Today, false);
 
-			EntegrasyonParametreler parametreler = new EntegrasyonParametreler
-			{
-				TarihBaslangic = DateTime.Today,
-				TarihBitis = DateTime.Today.AddDays(1),
-				TemizlikYap = false
-			};
 			var sonuc = _motor.EntegrasyonYap(parametreler);
 
 			Assert.AreEqual(SonucTip.SadeceAcikAyIcinEntegrasyonYapilabilir, sonuc.Tip);
@@ -55,12 +47,8 @@ namespace TahsilatEntegrasyon
 		public void islemi_sadece_yetkili_kullanicilar_yapabilir()
 		{
 			ortamAyarla(true, false);
-			EntegrasyonParametreler parametreler = new EntegrasyonParametreler
-			{
-				TarihBaslangic = DateTime.Today,
-				TarihBitis = DateTime.Today.AddDays(1),
-				TemizlikYap = false
-			};
+			var parametreler = new EntegrasyonParametreler(DateTime.Today, DateTime.Today, false);
+
 			var sonuc = _motor.EntegrasyonYap(parametreler);
 
 			Assert.AreEqual(SonucTip.KullaniciIslemYapmayaYetkiliDegil, sonuc.Tip);
@@ -70,17 +58,24 @@ namespace TahsilatEntegrasyon
 		public void islem_oncesi_temizlik_yapilir()
 		{
 			ortamAyarla(true, true);
+			var parametreler = new EntegrasyonParametreler(DateTime.Today, DateTime.Today, false);
 
-			EntegrasyonParametreler parametreler = new EntegrasyonParametreler
-			{
-				TarihBaslangic = DateTime.Today,
-				TarihBitis = DateTime.Today.AddDays(1),
-				TemizlikYap = true
-			};
 			var sonuc = _motor.EntegrasyonYap(parametreler);
 
 			_veritabaniVekili.Received(1).OncedenYaratilmisEntegrasyonFisleriniTemizle(parametreler.TarihBaslangic, parametreler.TarihBitis);
+			Assert.AreEqual(SonucTip.EntegrasyonTamamlandi, sonuc.Tip);
+		}
 
+		[Test]
+		public void tahsilat_kayitlari_veritabanindan_alinir()
+		{
+			ortamAyarla(true, true);
+			var parametreler = new EntegrasyonParametreler(DateTime.Today, DateTime.Today, false);
+
+			var sonuc = _motor.EntegrasyonYap(parametreler);
+
+			_veritabaniVekili.Received(1).OncedenYaratilmisEntegrasyonFisleriniTemizle(parametreler.TarihBaslangic, parametreler.TarihBitis);
+			_veritabaniVekili.Received(1).EntegreEdilecekTahsilatlariAl(parametreler.TarihBaslangic, parametreler.TarihBitis);
 			Assert.AreEqual(SonucTip.EntegrasyonTamamlandi, sonuc.Tip);
 		}
 
