@@ -13,6 +13,7 @@ namespace TahsilatEntegrasyon
 	public enum SonucTip
 	{
 		SadeceTekBirAyIcinIslemYapilabilir,
-		SadeceAcikAyIcinEntegrasyonYapilabilir
+		SadeceAcikAyIcinEntegrasyonYapilabilir,
+		KullaniciIslemYapmayaYetkiliDegil
 	}
 }
