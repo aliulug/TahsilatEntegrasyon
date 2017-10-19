@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -79,10 +81,28 @@ namespace TahsilatEntegrasyon
 			Assert.AreEqual(SonucTip.EntegrasyonTamamlandi, sonuc.Tip);
 		}
 
-		private void ortamAyarla(bool ayAcik, bool yetkiVar)
+		[Test]
+		public void bir_fis_yaratilir_ve_icine_tahsilatlarin_satirlari_eklenir()
+		{
+			var entegreEdilecekTahsilatAdedi = 75;
+			ortamAyarla(true, true, entegreEdilecekTahsilatAdedi);
+			var parametreler = new EntegrasyonParametreler(DateTime.Today, DateTime.Today, false);
+
+			var sonuc = _motor.EntegrasyonYap(parametreler);
+
+			_veritabaniVekili.Received(1).OncedenYaratilmisEntegrasyonFisleriniTemizle(parametreler.TarihBaslangic, parametreler.TarihBitis);
+			_veritabaniVekili.Received(1).EntegreEdilecekTahsilatlariAl(parametreler.TarihBaslangic, parametreler.TarihBitis);
+			_veritabaniVekili.Received(1).YeniEntegrasyonFisiGir();
+			_veritabaniVekili.Received(1).EntegrasyonFisineSatirlariEkle(Arg.Is<List<Tahsilat>>(arg => arg.Count == entegreEdilecekTahsilatAdedi));
+
+			Assert.AreEqual(SonucTip.EntegrasyonTamamlandi, sonuc.Tip);
+		}
+
+		private void ortamAyarla(bool ayAcik, bool yetkiVar, int entegreEdilecekTahsilatAdedi = 0)
 		{
 			_ayAcikKontrolcusu.AyAcikMi(DateTime.Today).Returns(ayAcik);
 			_yetkiKontrolcusu.TahsilatEntegrasyonYetkisiVarMi().Returns(yetkiVar);
+			_veritabaniVekili.EntegreEdilecekTahsilatlariAl(Arg.Any<DateTime>(), Arg.Any<DateTime>()).Returns(new Tahsilat[entegreEdilecekTahsilatAdedi].ToList());
 		}
 	}
 }

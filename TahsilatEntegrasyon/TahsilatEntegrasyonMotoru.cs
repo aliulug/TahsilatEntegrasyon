@@ -1,4 +1,5 @@
 ﻿using System;
+using NUnit.Framework;
 
 namespace TahsilatEntegrasyon
 {
@@ -27,7 +28,10 @@ namespace TahsilatEntegrasyon
 				return new EntegrasyonSonuc(SonucTip.SadeceTekBirAyIcinIslemYapilabilir);
 
 			_veritabaniVekili.OncedenYaratilmisEntegrasyonFisleriniTemizle(parametreler.TarihBaslangic,parametreler.TarihBitis);
-			_veritabaniVekili.EntegreEdilecekTahsilatlariAl(parametreler.TarihBaslangic, parametreler.TarihBitis);
+			var entegreEdilecekTahsilatlar = _veritabaniVekili.EntegreEdilecekTahsilatlariAl(parametreler.TarihBaslangic, parametreler.TarihBitis);
+
+			_veritabaniVekili.YeniEntegrasyonFisiGir();
+			_veritabaniVekili.EntegrasyonFisineSatirlariEkle(entegreEdilecekTahsilatlar);
 
 			return new EntegrasyonSonuc(SonucTip.EntegrasyonTamamlandi);
 		}
