@@ -14,6 +14,7 @@ namespace TahsilatEntegrasyon
 	{
 		SadeceTekBirAyIcinIslemYapilabilir,
 		SadeceAcikAyIcinEntegrasyonYapilabilir,
-		KullaniciIslemYapmayaYetkiliDegil
+		KullaniciIslemYapmayaYetkiliDegil,
+		EntegrasyonTamamlandi
 	}
 }
