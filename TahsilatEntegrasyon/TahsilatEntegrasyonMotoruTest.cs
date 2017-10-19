@@ -90,21 +90,4 @@ namespace TahsilatEntegrasyon
 			_yetkiKontrolcusu.TahsilatEntegrasyonYetkisiVarMi().Returns(yetkiVar);
 		}
 	}
-
-	public interface ITahsilatEntegrasyonVeritabaniVekili
-	{
-		void OncedenYaratilmisEntegrasyonFisleriniTemizle(DateTime tarihBaslangic, DateTime tarihBitis);
-	}
-
-	public class EntegrasyonParametreler
-	{
-		public DateTime TarihBaslangic { get; set; }
-		public DateTime TarihBitis { get; set; }
-		public bool TemizlikYap { get; set; }
-	}
-
-	public interface IYetkiKontrolcusu
-	{
-		bool TahsilatEntegrasyonYetkisiVarMi();
-	}
 }
