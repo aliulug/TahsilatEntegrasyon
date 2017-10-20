@@ -1,3 +1,6 @@
+Proje yaratıldıktan sonra NSubstitute.dll referans olarak eklenmeli.
+NuGet package manager içinden "install-package nunit" komutu çalıştırılmalı
+
 tahsilat - muhasebe entegrasyonu
 -----------------------------------------
 tahsilat kayıtlarını alıp bunlarla ilişkili muhasebe kayıtlarını yaratacak bir uygulama yazılacak.
